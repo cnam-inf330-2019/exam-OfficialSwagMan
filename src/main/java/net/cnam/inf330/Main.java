@@ -3,6 +3,7 @@ package net.cnam.inf330;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,10 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, URISyntaxException {
         List<String> lines = Main.readResourceFile("rover_data.txt");
-        MissionCommandCenter mcc = new MissionCommandCenter();
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
+        mcc.setGridHeight(3);
+        mcc.setGridWidth(3);
+
         List<String> outputLines = mcc.processRoverData(lines);
 
         System.out.println("\n===========");
@@ -30,6 +34,12 @@ public class Main {
         System.out.println("===========");
 
         // TODO 8) Write output lines to file
+        Path path = Paths.get("rover_data_out.txt");
+        String out="";
+        for (String line : outputLines)
+            out+=line+"\n";
+        byte[] strToBytes = out.getBytes();
+        Files.write(path, strToBytes);
     }
 
     /**

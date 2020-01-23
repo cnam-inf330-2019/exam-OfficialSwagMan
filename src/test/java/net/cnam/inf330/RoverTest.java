@@ -20,6 +20,7 @@ public class RoverTest {
     @BeforeClass // This method is run only once, before the test methods are run
     public static void initMissionCommandCenter() {
         // TODO 1) Initialize MCC singleton instance before the test methods are run
+        MissionCommandCenter.getInstance();
     }
 
     /**
@@ -29,7 +30,10 @@ public class RoverTest {
     // TODO 5) Change this test to check that the rover pulls back after moving out of the grid
     @Test
     public void testRoverOutOfGridException() {
-        MissionCommandCenter mcc = new MissionCommandCenter(1, 1);
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
+        mcc.setGridHeight(1);
+        mcc.setGridWidth(1);
+
         Rover rover = new Rover(1, 0, 0, Orientation.N);
         mcc.addRover(rover);
         rover.moveForward();
@@ -44,10 +48,42 @@ public class RoverTest {
     /* TODO 3) 5) Write a new test for a scenario where 2 rovers collide at the same position on the grid
      *   and the second rover must pull back as a result
      */
+    @Test
+    public void testRoverOnRoverException() {
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
+        mcc.setGridHeight(5);
+        mcc.setGridWidth(5);
+
+        Rover rover = new Rover(1, 0, 1, Orientation.N);
+        mcc.addRover(rover);
+
+        Rover rover2 = new Rover(2, 0, 0, Orientation.N);
+        mcc.addRover(rover2);
+        rover2.moveForward();
+
+        // TEST COLLIDE
+        ThrowingRunnable tr = () -> mcc.checkRoverPosition(rover2);
+        assertThrows(InvalidRoverPositionException.class, tr);
+        // TEST PULL BACK
+        assertNotEquals(Integer.toString(rover.getX())+Integer.toString(rover.getY()), Integer.toString(rover2.getX())+Integer.toString(rover2.getY()));
+
+        mcc.clearRovers();
+    }
 
     /* TODO 5) Write a new test for a scenario where a rover is created at an invalid position
      *   and is not deployed as a result
      */
+    @Test
+    public void testRoverDeployedException() {
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
+        mcc.setGridHeight(5);
+        mcc.setGridWidth(5);
+
+        assertNull(mcc.deployAndMoveRover(1, "6 6 N", "M"));
+        assertTrue(mcc.getRovers().size()==0);
+
+        mcc.clearRovers();
+    }
 
     /**
      * Application must produce output data that matches the expected output after processing the input rover data.
@@ -58,6 +94,12 @@ public class RoverTest {
         List<String> expectedOutputLines = Main.readResourceFile("rover_test_output.txt");
 
         // TODO 7) Test that processing the input lines produces an output that matches the expected output lines
-        fail();
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
+        mcc.setGridHeight(5);
+        mcc.setGridWidth(5);
+
+        List<String> outputLines = mcc.processRoverData(inputLines);
+
+        assertTrue(outputLines.equals(expectedOutputLines));
     }
 }

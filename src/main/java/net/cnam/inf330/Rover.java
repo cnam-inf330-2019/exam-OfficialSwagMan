@@ -119,6 +119,27 @@ public class Rover {
     }
 
     /**
+     * Move the Rover on the grid backwards.
+     */
+    public void moveBackward() {
+        switch (o) {
+            case N:
+                this.y = this.y - 1;
+                break;
+            case E:
+                this.x = this.x - 1;
+                break;
+            case S:
+                this.y = this.y + 1;
+                break;
+            case W:
+                this.x = this.x + 1;
+                break;
+            default:
+        }
+    }
+
+    /**
      * Get the Rover's ID.
      * @return The ID of the Rover as an integer
      */
