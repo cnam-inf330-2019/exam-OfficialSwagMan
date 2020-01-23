@@ -27,6 +27,16 @@ public final class MissionCommandCenter {
         return instance;
     }
 
+    public static MissionCommandCenter getInstance(int w, int h){
+        if (instance != null) {
+            synchronized (MissionCommandCenter.class) {
+                instance = new MissionCommandCenter(w, h);
+            }
+        }
+
+        return instance;
+    }
+
     /**
      * Create a MCC without a predefined grid size.
      */
@@ -164,8 +174,6 @@ public final class MissionCommandCenter {
      */
     public float computeRoverCoveragePercent(Rover rover) {
         // TODO 6) Compute the rover's grid coverage percentage
-        System.out.println("inside coverage LOOP"+Integer.toString(rover.getX())+Integer.toString(rover.getY()));
-        System.out.println(getGridHeight()*getGridWidth());
         float fullCoverageList = getGridHeight()*getGridWidth();
 
         coverageSet.add(Integer.toString(rover.getX())+Integer.toString(rover.getY()));

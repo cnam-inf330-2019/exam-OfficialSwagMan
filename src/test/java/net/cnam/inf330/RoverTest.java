@@ -30,9 +30,7 @@ public class RoverTest {
     // TODO 5) Change this test to check that the rover pulls back after moving out of the grid
     @Test
     public void testRoverOutOfGridException() {
-        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
-        mcc.setGridHeight(1);
-        mcc.setGridWidth(1);
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance(1, 1);
 
         Rover rover = new Rover(1, 0, 0, Orientation.N);
         mcc.addRover(rover);
@@ -50,9 +48,7 @@ public class RoverTest {
      */
     @Test
     public void testRoverOnRoverException() {
-        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
-        mcc.setGridHeight(5);
-        mcc.setGridWidth(5);
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance(5, 5);
 
         Rover rover = new Rover(1, 0, 1, Orientation.N);
         mcc.addRover(rover);
@@ -75,9 +71,7 @@ public class RoverTest {
      */
     @Test
     public void testRoverDeployedException() {
-        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
-        mcc.setGridHeight(5);
-        mcc.setGridWidth(5);
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance(5, 5);
 
         assertNull(mcc.deployAndMoveRover(1, "6 6 N", "M"));
         assertTrue(mcc.getRovers().size()==0);
@@ -94,12 +88,12 @@ public class RoverTest {
         List<String> expectedOutputLines = Main.readResourceFile("rover_test_output.txt");
 
         // TODO 7) Test that processing the input lines produces an output that matches the expected output lines
-        MissionCommandCenter mcc = MissionCommandCenter.getInstance();
-        mcc.setGridHeight(5);
-        mcc.setGridWidth(5);
+        MissionCommandCenter mcc = MissionCommandCenter.getInstance(5, 5);
 
         List<String> outputLines = mcc.processRoverData(inputLines);
 
         assertTrue(outputLines.equals(expectedOutputLines));
+
+        mcc.clearRovers();
     }
 }
