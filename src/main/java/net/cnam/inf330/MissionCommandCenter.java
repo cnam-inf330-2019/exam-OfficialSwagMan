@@ -85,8 +85,10 @@ public final class MissionCommandCenter {
             Rover rover = deployAndMoveRover(currentRoverId, roverInitialStateData, roverInstructionsData);
             // TEST IF NULL
             if(rover!=null) rovers.add(rover);
+            // FIXME What if the rover is null ? => NPE
             System.out.println("Rover " + currentRoverId + "'s final state : " + rover);
 
+            // FIXME Why compute it every turn ?
             float roverCoveragePercent = computeRoverCoveragePercent(rover);
             System.out.println("Rover " + rover.getId() + "'s grid coverage : " + roverCoveragePercent + "");
 
@@ -149,6 +151,7 @@ public final class MissionCommandCenter {
      */
     public void checkRoverPosition(Rover rover) throws InvalidRoverPositionException {
         if (rover.getX() > this.gridWidth || rover.getY() > this.gridHeight){
+            // FIXME This method should just throw the exception, not handle it
             rover.moveBackward();
             throw new InvalidRoverPositionException(rover,
                     "Position out of grid ! Communication signal weak.");
@@ -158,6 +161,7 @@ public final class MissionCommandCenter {
         // TODO 2) Throw an InvalidRoverPositionException if there is another rover on the rover's current position.
         for(Rover r : rovers){
             if (rover.getX() == r.getX() && rover.getY() == r.getY() && rover.getId() != r.getId()) {
+                // FIXME This method should just throw the exception, not handle it
                 rover.moveBackward();
                 throw new InvalidRoverPositionException(rover,
                         "Rover wants to go over another rover !");
@@ -176,6 +180,7 @@ public final class MissionCommandCenter {
         // TODO 6) Compute the rover's grid coverage percentage
         float fullCoverageList = getGridHeight()*getGridWidth();
 
+        // FIXME
         coverageSet.add(Integer.toString(rover.getX())+Integer.toString(rover.getY()));
 
         return ((float)coverageSet.size()/fullCoverageList);

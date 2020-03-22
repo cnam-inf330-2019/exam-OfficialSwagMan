@@ -20,6 +20,7 @@ public class RoverTest {
     @BeforeClass // This method is run only once, before the test methods are run
     public static void initMissionCommandCenter() {
         // TODO 1) Initialize MCC singleton instance before the test methods are run
+        // FIXME The idea was to store the instance in a member variable
         MissionCommandCenter.getInstance();
     }
 
@@ -27,7 +28,7 @@ public class RoverTest {
      * Application must catch an InvalidRoverPositionException if a rover has moved out of the grid.
      * Rover must pull back after moving out of the grid.
      */
-    // TODO 5) Change this test to check that the rover pulls back after moving out of the grid
+    // TODO FIXME 5) Change this test to check that the rover pulls back after moving out of the grid
     @Test
     public void testRoverOutOfGridException() {
         MissionCommandCenter mcc = MissionCommandCenter.getInstance(1, 1);
@@ -61,6 +62,7 @@ public class RoverTest {
         ThrowingRunnable tr = () -> mcc.checkRoverPosition(rover2);
         assertThrows(InvalidRoverPositionException.class, tr);
         // TEST PULL BACK
+        // FIXME Wrong test
         assertNotEquals(Integer.toString(rover.getX())+Integer.toString(rover.getY()), Integer.toString(rover2.getX())+Integer.toString(rover2.getY()));
 
         mcc.clearRovers();
@@ -92,6 +94,7 @@ public class RoverTest {
 
         List<String> outputLines = mcc.processRoverData(inputLines);
 
+        // FIXME Use AssertEquals
         assertTrue(outputLines.equals(expectedOutputLines));
 
         mcc.clearRovers();
